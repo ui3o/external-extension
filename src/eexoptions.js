@@ -6,7 +6,6 @@ function save_options() {
     setTimeout(() => {
         chrome.storage.sync.set({ urllink }, function () {
             // Update status to let user know options were saved.
-            console.log('go')
             try {
                 JSON.parse(urllink).forEach(path => {
                     if (path.link) {
@@ -17,7 +16,6 @@ function save_options() {
                 });                    
             } catch (error) {
                 $("#error-block").css("display", "initial");
-                
             }
         });
     }, 300);

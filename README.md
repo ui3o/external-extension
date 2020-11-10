@@ -21,6 +21,15 @@ eex.bPort.onMessage.addListener(function(msg) {
 eex.bPort.postMessage({ func: eex.func2Background(testEval, 'test'), data:{question: "What is your name?"}});
 ```
 
+# Options
+
+The injection settings need to be a JSON stringified array.
+
+```
+[{"link": "https://...js", "pathinclude": "/test/"}, {"link": "https://...js", "pathinclude": "/test/"}]
+```
+
+
 # Licesne
 
 MIT

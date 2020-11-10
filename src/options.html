@@ -10,11 +10,16 @@
             <div class="col">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">External url to content script</span>
+                        <span class="input-group-text" id="basic-addon1">Injections</span>
                     </div>
-                    <input id="urllink" type="text" class="form-control" placeholder="url" aria-label="Username"
+                    <input id="urllink" type="text" class="form-control" placeholder='[{"link": "https://...js", "pathinclude": "/test/"}]' aria-label="Username"
                         aria-describedby="basic-addon1">
+                    </div>
                 </div>
+            </div>
+            <div class="row" style="margin-bottom: 15px;">
+                <div class="col">
+                    <span style="font-size: 13px;">JSON array: [{"link": "https://...js", "pathinclude": "/test/"}]</span>
             </div>
         </div>
         <div class="row" style="margin-bottom: 25px">
@@ -25,7 +30,7 @@
         <div class="row" style="margin-bottom: 25px;margin-top: 10px;">
             <div class="col">
                 <div class="alert alert-success" role="alert" style="display: none;" id="success-block">Success!</div>
-                <div class="alert alert-danger" role="alert" style="display: none;" id="error-block">Please login or check youraccess to the url!</div>
+                <div class="alert alert-danger" role="alert" style="display: none;" id="error-block">Please login or check your access to the url!</div>
             </div>
         </div>
     </div>

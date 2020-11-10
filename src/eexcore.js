@@ -35,9 +35,11 @@ eex.appendContentJs = function (path, uniqueId) {
 
 // load inject.js
 if (!window.isoptionpage) {
-  chrome.storage.sync.get({ urllink: '' }, function (items) {
-    if(items.urllink) {
-      eex.appendContentJs(items.urllink, 'boot');
-    }
+  chrome.storage.sync.get({ urllink: '[]' }, function (items) {
+    JSON.parse(items.urllink).forEach(path => {
+      if(window.location.href.includes(path.pathinclude)) {
+        eex.appendContentJs(path.link, 'boot');
+      }
+    });
   });
 }

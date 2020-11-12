@@ -18,7 +18,7 @@ eex.appendContentJs = function (path, uniqueId) {
     success: function (data) {
       const id = uniqueId ? uniqueId : new Date().getTime();
       const jsName = path.replace(/(.*\/)(.*)\.js/g, "$2");
-      const js = `console.log('loaded')\n${data}\n//# sourceURL=${jsName}-${id}.js`
+      const js = `console.log('loaded');\n${data}\n//# sourceURL=${jsName}-${id}.js`
       if (window.isoptionpage) {
         $("#success-block").css("display", "initial");
       }

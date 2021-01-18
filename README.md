@@ -26,9 +26,10 @@ eex.bPort.postMessage({ func: eex.func2Background(testEval, 'test'), data:{quest
 The injection settings need to be a JSON stringified array.
 
 ```
-[{"link": "https://...js", "pathinclude": "/test/"}, {"link": "https://...js", "pathinclude": "/test/"}]
+[{"link": "https://...js", "pathinclude": "/test/"}, {"link": "https://...", "pathinclude": "/test/", corsonly:true}]
 ```
 
+If `corsonly` is set, no external link will be loaded. The links just added only for CORS path. 
 
 # Licesne
 

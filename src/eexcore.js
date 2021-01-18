@@ -37,7 +37,7 @@ eex.appendContentJs = function (path, uniqueId) {
 if (!window.isoptionpage) {
   chrome.storage.sync.get({ urllink: '[]' }, function (items) {
     JSON.parse(items.urllink).forEach(path => {
-      if(window.location.href.includes(path.pathinclude)) {
+      if(window.location.href.includes(path.pathinclude) && !path.corsonly) {
         eex.appendContentJs(path.link, 'boot');
       }
     });

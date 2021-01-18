@@ -38,21 +38,44 @@ function onHeadersReceived(e) {
   return { responseHeaders: e.responseHeaders };
 };
 
+function registerCors(item) {
+  if (item.urllink !== '') {
+    try {
+      const extra = ['blocking', 'responseHeaders'];
+      if (/Firefox/.test(navigator.userAgent) === false) {
+        extra.push('extraHeaders');
+      }
+      const urls = [];
+      const items = JSON.parse(item.urllink);
+      if (items instanceof Array) {
+        items.forEach(i => {
+          if (i.link && i.pathinclude) {
+            urls.push(i.link);
+            urls.push(`${i.pathinclude}*`);
+          }
+        });
+        if (urls.length) {
+          chrome.webRequest.onHeadersReceived.addListener(
+            onHeadersReceived,
+            { urls },
+            extra
+          );
+        }
+      } else {
+        console.log('JSON is does not have well format!')
+      }
+    } catch (error) {
+      console.log('invalid JSON in option!')
+    }
+  }
+}
+
 // read settings
 chrome.storage.sync.get({ 'urllink': '' }, (item) => {
-  const extra = ['blocking', 'responseHeaders'];
-  if (/Firefox/.test(navigator.userAgent) === false) {
-    extra.push('extraHeaders');
-  }
-  const urls = [];
-  const items = JSON.parse(item.urllink);
-  items.forEach(i => {
-    urls.push(i.link);
-    urls.push(`${i.pathinclude}*`);
-  });
-  chrome.webRequest.onHeadersReceived.addListener(
-    onHeadersReceived,
-    { urls },
-    extra
-  );
+  registerCors(item);
+})
+
+chrome.storage.sync.onChanged.addListener(item => {
+  chrome.webRequest.onHeadersReceived.removeListener(onHeadersReceived);
+  registerCors({ urllink: item.urllink.newValue });
 })

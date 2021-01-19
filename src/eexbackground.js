@@ -1,4 +1,5 @@
 
+
 chrome.runtime.onConnect.addListener(
   function bsListener(cPort) {
     console.assert(cPort.name == "eex-background");
@@ -8,6 +9,10 @@ chrome.runtime.onConnect.addListener(
     });
   }
 );
+
+var urlLinks = [];
+const tabHeaders = {};
+chrome.tabs.onRemoved.addListener(tabId => delete tabHeaders[tabId]);
 
 function addOrReplaceHeader(responseHeaders, newHeaders) {
   newHeaders.forEach(function (header) {
@@ -41,7 +46,7 @@ function onHeadersReceived(e) {
 function registerCors(item) {
   if (item.urllink !== '') {
     try {
-      const extra = ['blocking', 'responseHeaders'];
+      const extra = ['blocking'];
       if (/Firefox/.test(navigator.userAgent) === false) {
         extra.push('extraHeaders');
       }
@@ -50,16 +55,38 @@ function registerCors(item) {
       if (items instanceof Array) {
         items.forEach(i => {
           if (i.link && i.pathinclude) {
+            if (i.linkinclude) {
+              urls.push(`${i.linkinclude}*`);
+            }
             urls.push(i.link);
             urls.push(`${i.pathinclude}*`);
           }
         });
         if (urls.length) {
+          urlLinks = items;
           chrome.webRequest.onHeadersReceived.addListener(
             onHeadersReceived,
             { urls },
-            extra
+            ['responseHeaders', ...extra]
           );
+          chrome.webRequest.onBeforeSendHeaders.addListener(
+            function (details) {
+              let requestHeaders = details.requestHeaders;
+              if (requestHeaders.length) {
+                const hasCookie = requestHeaders.some(header => header.name.toLowerCase() === 'Cookie'.toLowerCase());
+                const hasInclude = urlLinks.some(u => details.url.includes(u.pathinclude) || details.url.includes(u.linkinclude));
+                if (hasCookie) {
+                  tabHeaders[details.tabId] = requestHeaders;
+                } else if (hasInclude) {
+                  requestHeaders = tabHeaders[details.tabId];
+                }
+              }
+              return { requestHeaders };
+            },
+            { urls },
+            ["requestHeaders", ...extra]
+          );
+
         }
       } else {
         console.log('JSON is does not have well format!')

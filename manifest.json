@@ -1,6 +1,6 @@
 {
   "name": "External script loader",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "manifest_version": 2,
   "description": "Enable to load external script when a page loaded",
   "homepage_url": "https://github.com/ui3o/external-extension/",

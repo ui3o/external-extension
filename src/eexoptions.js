@@ -10,10 +10,10 @@ function save_options() {
                 JSON.parse(urllink).forEach(path => {
                     if (path.link) {
                         eex.appendContentJs(path.link, 'boot');
-                    } else {
+                    } else if (!path.corsonly) {
                         $("#error-block").css("display", "initial");
-                    }                        
-                });                    
+                    }
+                });
             } catch (error) {
                 $("#error-block").css("display", "initial");
             }

@@ -54,12 +54,16 @@ function registerCors(item) {
       const items = JSON.parse(item.urllink);
       if (items instanceof Array) {
         items.forEach(i => {
-          if (i.link && i.pathinclude) {
+          if (i.pathinclude && (i.link || i.linkinclude)) {
             if (i.linkinclude) {
               urls.push(`${i.linkinclude}*`);
             }
-            urls.push(i.link);
-            urls.push(`${i.pathinclude}*`);
+            if (i.pathinclude) {
+              urls.push(`${i.pathinclude}*`);
+            }
+            if (i.link) {
+              urls.push(i.link);
+            }
           }
         });
         if (urls.length) {

@@ -29,9 +29,9 @@ The injection settings need to be a JSON stringified array.
 [{"link": "https://...js", "pathinclude": "/test/"}, {"link": "https://...", "pathinclude": "/test/", corsonly:true}, {"linkinclude": "https://...", "pathinclude": "/test/", corsonly:true}]
 ```
 
-If `corsonly` is set, no external link will be loaded. The links just added only for CORS path. `linkinclude` also available only for CORS. 
+If `corsonly` is set, no external link will be loaded. The links just added only for CORS path, which means you can load resources from other url. Do not need to turn off the CORS in the browser! `linkinclude` also available only for CORS. 
 
-# Iframe
+# iframe
 
 All iframe going to have a message listener:
 

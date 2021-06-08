@@ -31,6 +31,24 @@ The injection settings need to be a JSON stringified array.
 
 If `corsonly` is set, no external link will be loaded. The links just added only for CORS path. `linkinclude` also available only for CORS. 
 
+# Iframe
+
+All iframe going to have a message listener:
+
+```
+window.addEventListener("message", (event) => {
+    if (event.data.type === 'eval' && event.data.script.length){
+      eval(event.data.script);
+    }
+  }, false);
+```
+
+You can evaluate script from top:
+
+```
+window.frames.WebApplicationFrame.postMessage({type:'eval', script:`document.querySelector('#item').click()`}, '*');
+```
+
 # Licesne
 
 MIT

@@ -1,4 +1,4 @@
-console.log(`%iframe loaded`, "color:green");
+console.log(`%ciframe injector loaded`, "color:green");
 
 // inside the iframe
 if (window.self !== window.top) {

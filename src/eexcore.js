@@ -1,5 +1,3 @@
-console.log(`%ceexcore loaded`, "color:green");
-
 window.eex = {
   bPort: chrome.runtime.connect({ name: "eex-background" }) // background port
 }

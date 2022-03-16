@@ -1,5 +1,3 @@
-console.log(`..iframe injector loaded..`);
-
 // inside the iframe
 if (window.self !== window.top) {
   window.addEventListener("message", (event) => {

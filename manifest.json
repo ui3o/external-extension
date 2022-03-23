@@ -1,6 +1,6 @@
 {
   "name": "External script loader",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "manifest_version": 2,
   "description": "Enable to load external script when a page loaded",
   "homepage_url": "https://github.com/ui3o/external-extension/",
@@ -16,8 +16,7 @@
         "http://*/*"
       ],
       "js": [
-        "src/jquery-3.4.1.min.js",
-        "src/eexcore.js"
+        "src/core.js"
       ],
       "run_at": "document_start"
     },
@@ -33,10 +32,9 @@
       "all_frames": true
     }
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "background": {
     "scripts": [
-      "src/eexbackground.js"
+      "src/background.js"
     ]
   },
   "permissions": [

@@ -1,21 +1,21 @@
 // Saves options to chrome.storage
 function save_options() {
-    var urllink = document.getElementById('urllink').value;
-    $("#success-block").css("display", "none");
-    $("#error-block").css("display", "none");
+    var urlLink = document.getElementById('urllink').value;
+    document.querySelector("#success-block").style.display = "none";
+    document.querySelector("#error-block").style.display = "none";
     setTimeout(() => {
-        chrome.storage.sync.set({ urllink }, function () {
+        chrome.storage.sync.set({ urllink: urlLink }, function () {
             // Update status to let user know options were saved.
             try {
-                JSON.parse(urllink).forEach(path => {
+                JSON.parse(urlLink).forEach(path => {
                     if (path.link) {
-                        eex.appendContentJs(path.link, 'boot');
+                        appendContentJs(path.link, 'boot');
                     } else if (!path.corsonly) {
-                        $("#error-block").css("display", "initial");
+                        document.querySelector("#error-block").style.display = "initial";
                     }
                 });
             } catch (error) {
-                $("#error-block").css("display", "initial");
+                document.querySelector("#error-block").style.display = "initial";
             }
         });
     }, 300);
@@ -32,4 +32,4 @@ function restore_options() {
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
 
-window.isoptionpage = true;
+window.isOptionPage = true;

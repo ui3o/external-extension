@@ -1,14 +1,42 @@
-
-
 chrome.runtime.onConnect.addListener(
   function bsListener(cPort) {
     console.assert(cPort.name == "eex-background");
     cPort.onMessage.addListener(function (msg) {
       console.log(`%ceex-background msg received`, "color:darkviolet");
-      eval(msg.func);
+      if (msg.type === 'iframe') {
+        const iframe = document.querySelector(`#${msg.data.id}`)
+        if (iframe) {
+          iframe.parentNode.removeChild(iframe);
+        }
+        console.assert(msg.data.id);
+        console.assert(msg.data.src);
+        // create iframe
+        const element = document.createElement('iframe');
+        element.src = msg.data.src;
+        element.id = msg.data.id;
+        document.querySelector('html').appendChild(element);
+      }
+      if (msg.type === 'localStorageSync') {
+        console.assert(msg.data);
+        const keys = Object.keys(localStorage).filter(k => k.startsWith(`eexReadOnly:${msg.data}:`));
+        const values = [];
+        keys.forEach(key => {
+          values.push({ key, val: localStorage.getItem(key) });
+        });
+        cPort.postMessage({ type: 'localStorageSync', data: values });
+      }
     });
   }
 );
+
+window.addEventListener("message", (event) => {
+  if (event.data.type === 'saveToParentStorage') {
+    console.log('saveToParentStorage');
+    console.assert(event.data.key);
+    console.assert(event.data.val);
+    localStorage.setItem(event.data.key, event.data.val);
+  }
+});
 
 var urlLinks = [];
 const tabHeaders = {};
@@ -104,9 +132,9 @@ function registerCors(item) {
 // read settings
 chrome.storage.sync.get({ 'urllink': '' }, (item) => {
   registerCors(item);
-})
+});
 
 chrome.storage.sync.onChanged.addListener(item => {
   chrome.webRequest.onHeadersReceived.removeListener(onHeadersReceived);
   registerCors({ urllink: item.urllink.newValue });
-})
+});

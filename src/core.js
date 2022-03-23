@@ -67,13 +67,28 @@ function regStorageItemChange(host, key, callback = () => { }) {
   }, 50);
 }
 
+// register for document ready event
+function onDocumentReady(fn = () => { }) {
+  // see if DOM is already available
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    // call on next available tick
+    setTimeout(fn, 1);
+  } else {
+    document.addEventListener("DOMContentLoaded", fn);
+  }
+}
+
 // load
 if (!window.isOptionPage) {
   chrome.storage.sync.get({ urllink: '[]' }, function (items) {
     const links = JSON.parse(items.urllink);
     if (links) {
       const element = document.createElement('script');
-      element.innerHTML = `window.eex={};window.eex.loadBackgroundIframe=${loadBackgroundIframe};window.eex.getItem=${getItem};window.eex.regStorageItemChange=${regStorageItemChange}`;
+      element.innerHTML = `window.eex={};
+              window.eex.loadBackgroundIframe=${loadBackgroundIframe};
+              window.eex.getItem=${getItem};
+              window.eex.regStorageItemChange=${regStorageItemChange};
+              window.eex.onDocumentReady=${onDocumentReady}`;
       element.id = 'eexMessenger';
       document.querySelector('html').appendChild(element);
     }

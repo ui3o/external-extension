@@ -22,6 +22,8 @@ chrome.runtime.onConnect.addListener(
         const values = [];
         keys.forEach(key => {
           values.push({ key, val: localStorage.getItem(key) });
+          // remove transferred item
+          localStorage.removeItem(key);
         });
         cPort.postMessage({ type: 'localStorageSync', data: values });
       }

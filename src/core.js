@@ -28,8 +28,8 @@ const appendContentJs = function (path, uniqueId) {
         document.querySelector("#success-block").style.display = "initial";
       }
       const element = document.createElement('script');
-      element.innerHTML = xmlHttp.responseText;
       element.id = uniqueId;
+      element.appendChild(document.createTextNode(`${xmlHttp.responseText}`));
       document.querySelector('html').appendChild(element);
     }
     if (xmlHttp.readyState == 4 && xmlHttp.status >= 300) {
@@ -83,13 +83,14 @@ if (!window.isOptionPage) {
   chrome.storage.sync.get({ urllink: '[]' }, function (items) {
     const links = JSON.parse(items.urllink);
     if (links) {
+      const text = `window.eex={};
+          window.eex.loadBackgroundIframe=${loadBackgroundIframe};
+          window.eex.getItem=${getItem};
+          window.eex.regStorageItemChange=${regStorageItemChange};
+          window.eex.onDocumentReady=${onDocumentReady}`;
       const element = document.createElement('script');
-      element.innerHTML = `window.eex={};
-              window.eex.loadBackgroundIframe=${loadBackgroundIframe};
-              window.eex.getItem=${getItem};
-              window.eex.regStorageItemChange=${regStorageItemChange};
-              window.eex.onDocumentReady=${onDocumentReady}`;
       element.id = 'eexMessenger';
+      element.appendChild(document.createTextNode(text));
       document.querySelector('html').appendChild(element);
     }
     links.forEach(path => {
